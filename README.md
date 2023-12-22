@@ -1,2 +1,0 @@
-# Parm
-projet Parm Architecture
