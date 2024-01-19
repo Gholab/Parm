@@ -4,13 +4,12 @@
 
   <lib desc="#Wiring" name="0">
     <tool name="Splitter">
-      <a name="facing" val="west"/>
       <a name="fanout" val="4"/>
       <a name="incoming" val="1"/>
     </tool>
     <tool name="Pin">
       <a name="appearance" val="classic"/>
-      <a name="facing" val="north"/>
+      <a name="facing" val="west"/>
     </tool>
     <tool name="Probe">
       <a name="appearance" val="classic"/>
@@ -122,13 +121,13 @@ end TCL_Generic;
     </tool>
   </lib>
   <lib desc="#BFH-Praktika" name="9"/>
-  <lib desc="file#Ctl_Data_Processing.circ" name="10"/>
-  <lib desc="file#Ctl_Load_Store.circ" name="11"/>
-  <lib desc="file#Ctl_SP_Address.circ" name="12"/>
-  <lib desc="file#Ctl_Shift_Add_Sub_Mov.circ" name="13"/>
-  <lib desc="file#Ctl_Flags_APSR.circ" name="14"/>
-  <lib desc="file#Ctl_Opcode_Decoder.circ" name="15"/>
-  <lib desc="file#Ctl_Conditional.circ" name="16"/>
+  <lib desc="file#Ctl_Load_Store.circ" name="10"/>
+  <lib desc="file#Ctl_Conditional.circ" name="11"/>
+  <lib desc="file#Ctl_Shift_Add_Sub_Mov.circ" name="12"/>
+  <lib desc="file#Ctl_Data_Processing.circ" name="13"/>
+  <lib desc="file#Ctl_Opcode_Decoder.circ" name="14"/>
+  <lib desc="file#Ctl_Flags_APSR.circ" name="15"/>
+  <lib desc="file#Ctl_SP_Address.circ" name="16"/>
   <main name="Controller"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -426,13 +425,13 @@ end TCL_Generic;
       <a name="size" val="30"/>
       <a name="width" val="4"/>
     </comp>
-    <comp lib="10" loc="(940,380)" name="Data_Processing"/>
-    <comp lib="11" loc="(920,690)" name="Load_Store"/>
-    <comp lib="12" loc="(990,880)" name="SP_Address"/>
-    <comp lib="13" loc="(920,210)" name="Shift_Add_Sub_Mov"/>
-    <comp lib="14" loc="(980,550)" name="Flags_APSR"/>
-    <comp lib="15" loc="(520,240)" name="Opcode_Decoder"/>
-    <comp lib="16" loc="(900,1090)" name="Conditional"/>
+    <comp lib="10" loc="(920,690)" name="Load_Store"/>
+    <comp lib="11" loc="(900,1090)" name="Conditional"/>
+    <comp lib="12" loc="(920,210)" name="Shift_Add_Sub_Mov"/>
+    <comp lib="13" loc="(940,380)" name="Data_Processing"/>
+    <comp lib="14" loc="(520,240)" name="Opcode_Decoder"/>
+    <comp lib="15" loc="(980,550)" name="Flags_APSR"/>
+    <comp lib="16" loc="(990,880)" name="SP_Address"/>
     <comp lib="2" loc="(1270,70)" name="Multiplexer"/>
     <comp lib="3" loc="(1000,1080)" name="Adder">
       <a name="width" val="16"/>
