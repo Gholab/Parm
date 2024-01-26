@@ -4,17 +4,17 @@
 
   <lib desc="#Wiring" name="0">
     <tool name="Splitter">
+      <a name="facing" val="west"/>
       <a name="fanout" val="4"/>
       <a name="incoming" val="1"/>
     </tool>
     <tool name="Pin">
       <a name="appearance" val="classic"/>
-      <a name="facing" val="west"/>
     </tool>
     <tool name="Probe">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="radix" val="10unsigned"/>
+      <a name="radix" val="10signed"/>
     </tool>
     <tool name="Tunnel">
       <a name="facing" val="south"/>
@@ -32,7 +32,6 @@
     </tool>
     <tool name="Ground">
       <a name="facing" val="west"/>
-      <a name="width" val="24"/>
     </tool>
     <tool name="Transistor">
       <a name="type" val="n"/>
@@ -46,7 +45,7 @@
       <a name="size" val="30"/>
     </tool>
     <tool name="OR Gate">
-      <a name="size" val="30"/>
+      <a name="inputs" val="4"/>
     </tool>
     <tool name="XOR Gate">
       <a name="inputs" val="3"/>
@@ -54,6 +53,9 @@
     </tool>
   </lib>
   <lib desc="#Plexers" name="2">
+    <tool name="Multiplexer">
+      <a name="select" val="4"/>
+    </tool>
     <tool name="Decoder">
       <a name="select" val="3"/>
     </tool>
@@ -86,7 +88,11 @@
       <a name="width" val="32"/>
     </tool>
   </lib>
-  <lib desc="#Memory" name="4"/>
+  <lib desc="#Memory" name="4">
+    <tool name="Register">
+      <a name="width" val="32"/>
+    </tool>
+  </lib>
   <lib desc="#I/O" name="5">
     <tool name="DipSwitch">
       <a name="number" val="32"/>
@@ -163,12 +169,12 @@ end TCL_Generic;
   <lib desc="#Input/Output-Extra" name="10"/>
   <lib desc="#TTL" name="11"/>
   <lib desc="file#Controller.circ" name="12"/>
-  <lib desc="file#BancDeRegistres.circ" name="13"/>
-  <lib desc="file#ALU.circ" name="14">
+  <lib desc="file#ALU.circ" name="13">
     <tool name="ALU">
       <a name="facing" val="east"/>
     </tool>
   </lib>
+  <lib desc="file#BancDeRegistres.circ" name="14"/>
   <main name="Facade"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -1597,7 +1603,7 @@ end TCL_Generic;
       <a name="addrWidth" val="16"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 16 16
-0
+20aa 21ff b004 9001 9100 b081 9a01
 </a>
       <a name="dataWidth" val="16"/>
       <a name="label" val="ROMa"/>
@@ -2107,7 +2113,7 @@ end TCL_Generic;
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1040,670)" name="Tunnel">
-      <a name="label" val="Flags"/>
+      <a name="label" val="FlagsAlu"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(1100,180)" name="Tunnel">
@@ -2140,7 +2146,7 @@ end TCL_Generic;
     </comp>
     <comp lib="0" loc="(1190,470)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="Flags"/>
+      <a name="label" val="FlagsOut"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(1190,540)" name="Tunnel">
@@ -2231,7 +2237,7 @@ end TCL_Generic;
     </comp>
     <comp lib="0" loc="(290,460)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="Flags"/>
+      <a name="label" val="FlagsAlu"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(330,410)" name="Tunnel">
@@ -2303,16 +2309,12 @@ end TCL_Generic;
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(550,650)" name="Tunnel">
-      <a name="label" val="Flags"/>
+      <a name="label" val="FlagsOut"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(590,190)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="Load"/>
-    </comp>
-    <comp lib="0" loc="(600,670)" name="Tunnel">
-      <a name="label" val="SP"/>
-      <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(600,820)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -2332,6 +2334,10 @@ end TCL_Generic;
     <comp lib="0" loc="(630,590)" name="Tunnel">
       <a name="label" val="Imm5"/>
       <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(630,670)" name="Tunnel">
+      <a name="label" val="SP"/>
+      <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(660,840)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -2447,11 +2453,11 @@ end TCL_Generic;
     <comp lib="12" loc="(530,390)" name="Controller">
       <a name="label" val="Controller_1"/>
     </comp>
-    <comp lib="13" loc="(990,140)" name="BancRegistre">
-      <a name="label" val="Regs_1"/>
-    </comp>
-    <comp lib="14" loc="(970,670)" name="ALU">
+    <comp lib="13" loc="(970,670)" name="ALU">
       <a name="label" val="ALU_1"/>
+    </comp>
+    <comp lib="14" loc="(990,140)" name="BancRegistre">
+      <a name="label" val="Regs_1"/>
     </comp>
     <comp lib="2" loc="(1250,790)" name="Multiplexer">
       <a name="width" val="32"/>
@@ -2504,7 +2510,7 @@ end TCL_Generic;
     <wire from="(530,610)" to="(540,610)"/>
     <wire from="(530,630)" to="(620,630)"/>
     <wire from="(530,650)" to="(550,650)"/>
-    <wire from="(530,670)" to="(600,670)"/>
+    <wire from="(530,670)" to="(630,670)"/>
     <wire from="(530,800)" to="(650,800)"/>
     <wire from="(550,130)" to="(550,140)"/>
     <wire from="(550,140)" to="(580,140)"/>
