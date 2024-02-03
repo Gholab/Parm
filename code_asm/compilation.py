@@ -31,7 +31,8 @@ dico ={
     "muls": "0100001101",
     "bics": "0100001110",
     "mvns": "0100001111",
-    
+    "str": "1001",
+    "ldr": "1010",
 
 }
 def toBinary(nb, place): #place que ça prend
@@ -77,6 +78,7 @@ def instruction_ToBinary(instruction): #instruction est une String
     str_binary=""
     cpt=cptReg(separate)
     Imm=hasImm(separate)
+    casLoadStore=False
     casPart=False
     casReverse=True
     if(separate[0] in {"adds","subs"}):
@@ -88,11 +90,19 @@ def instruction_ToBinary(instruction): #instruction est une String
         elif(cpt==1): #cas il y'a 2 registres ex: adds r2, r3, #2
            str_binary+=dico[separate[0]][2]
            casReverse=False
+    
     elif(separate[0] in {"lsls","lsrs","asrs"}):
         if(Imm):
            str_binary+=dico[separate[0]][0]
         else:
            str_binary+=dico[separate[0]][1]
+    elif(separate[0] in {"str","ldr"}):
+        print(separate)
+        separate.remove('[sp')
+        separate[2]=separate[2].replace(']', '')
+        print(separate)
+        
+        
     elif(separate[0] in dico): #cas il y'a 1 registres ex: adds r2, #154
         str_binary+=dico[separate[0]] #mettre l'operation en premier
         if(cpt==1): 
@@ -143,8 +153,8 @@ def instruction_ToBinary(instruction): #instruction est une String
 def compilation(instruction):
     return toHexa(instruction_ToBinary(instruction)) 
 
-
-
+print(compilation("str r0, [sp, #4]"))
+'''
 
 with open(input_file_name, 'r') as input_file:
     # Read the contents of the input file
@@ -156,3 +166,4 @@ with open(input_file_name, 'r') as input_file:
             content = compilation(line) 
             output_file.write(content)
             output_file.write(" ")      
+'''

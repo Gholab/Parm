@@ -1,10 +1,9 @@
-adds r4, #154
-subs r6, #154
-adds r2, r3, r2
-movs r0, #154
-cmp r0, #154
-ands r2, r3
-eors r2, r3
-lsls r2, r3, #2
-lsls r2, r3
-lsrs r2, r3
+lsls r4, r2, #1
+adds r4, r2, r1
+subs r4, r2, r1
+subs r4, r2, #3
+movs r6, #212
+adds r6, #212
+str r6, [sp, #4]
+add sp, #4
+sub sp, #0
