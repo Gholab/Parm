@@ -486,15 +486,6 @@ end TCL_Generic;
     <comp lib="0" loc="(290,300)" name="Tunnel">
       <a name="label" val="ADD_SUB"/>
     </comp>
-    <comp lib="0" loc="(290,320)" name="Tunnel">
-      <a name="label" val="CMP"/>
-    </comp>
-    <comp lib="0" loc="(290,340)" name="Tunnel">
-      <a name="label" val="SUB_IMM"/>
-    </comp>
-    <comp lib="0" loc="(290,340)" name="Tunnel">
-      <a name="label" val="SUB_IMM"/>
-    </comp>
     <comp lib="0" loc="(290,460)" name="Tunnel">
       <a name="label" val="SUB_R"/>
     </comp>
@@ -504,6 +495,9 @@ end TCL_Generic;
     <comp lib="0" loc="(310,160)" name="Tunnel">
       <a name="label" val="Instr"/>
       <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(320,340)" name="Tunnel">
+      <a name="label" val="SUB_IMM"/>
     </comp>
     <comp lib="0" loc="(340,1000)" name="Splitter">
       <a name="bit1" val="0"/>
@@ -583,6 +577,9 @@ end TCL_Generic;
       <a name="bit9" val="2"/>
       <a name="fanout" val="3"/>
       <a name="incoming" val="16"/>
+    </comp>
+    <comp lib="0" loc="(400,320)" name="Tunnel">
+      <a name="label" val="CMP"/>
     </comp>
     <comp lib="0" loc="(420,820)" name="Tunnel">
       <a name="label" val="RD3"/>
@@ -1125,39 +1122,39 @@ end TCL_Generic;
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="Pull output low on Enable = 0"/>
     </comp>
-    <comp lib="8" loc="(726,136)" name="Text">
+    <comp lib="8" loc="(725,135)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="Rn"/>
     </comp>
-    <comp lib="8" loc="(726,32)" name="Text">
+    <comp lib="8" loc="(725,30)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="Rm"/>
     </comp>
-    <comp lib="8" loc="(734,271)" name="Text">
+    <comp lib="8" loc="(730,270)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="Rd"/>
     </comp>
-    <comp lib="8" loc="(738,456)" name="Text">
+    <comp lib="8" loc="(735,455)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="imm5"/>
     </comp>
-    <comp lib="8" loc="(745,527)" name="Text">
-      <a name="font" val="SansSerif bold 20"/>
-      <a name="text" val="imm32"/>
-    </comp>
-    <comp lib="8" loc="(748,2026)" name="Text">
+    <comp lib="8" loc="(745,2025)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="Carry"/>
     </comp>
-    <comp lib="8" loc="(771,1492)" name="Text">
+    <comp lib="8" loc="(745,525)" name="Text">
+      <a name="font" val="SansSerif bold 20"/>
+      <a name="text" val="imm32"/>
+    </comp>
+    <comp lib="8" loc="(770,1490)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="ALU OPCODE"/>
     </comp>
-    <comp lib="8" loc="(779,762)" name="Text">
+    <comp lib="8" loc="(775,760)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="imm32 enable"/>
     </comp>
-    <comp lib="8" loc="(801,1061)" name="Text">
+    <comp lib="8" loc="(800,1060)" name="Text">
       <a name="font" val="SansSerif bold 20"/>
       <a name="text" val="Flags Update mask"/>
     </comp>
@@ -1238,9 +1235,9 @@ end TCL_Generic;
     <wire from="(180,290)" to="(230,290)"/>
     <wire from="(180,300)" to="(290,300)"/>
     <wire from="(180,310)" to="(230,310)"/>
-    <wire from="(180,320)" to="(290,320)"/>
+    <wire from="(180,320)" to="(400,320)"/>
     <wire from="(180,330)" to="(230,330)"/>
-    <wire from="(180,340)" to="(290,340)"/>
+    <wire from="(180,340)" to="(320,340)"/>
     <wire from="(180,990)" to="(210,990)"/>
     <wire from="(190,450)" to="(230,450)"/>
     <wire from="(190,460)" to="(290,460)"/>
