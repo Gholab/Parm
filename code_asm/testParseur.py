@@ -24,7 +24,9 @@ class TestParse(unittest.TestCase):
             
         ]
         
-        for input_file, expected_output_file in test_cases:
+        total_subtests = len(test_cases)
+        
+        for i, (input_file, expected_output_file) in enumerate(test_cases, start=1):
             with self.subTest(input_file=input_file):
                 # Call the Parse function with input file
                 output_file_name = Parse(input_file)
@@ -36,7 +38,9 @@ class TestParse(unittest.TestCase):
                     expected_output = expected_output_file.read().strip()
                 
                 # Assert actual output matches expected output
-                self.assertEqual(actual_output, expected_output)
+                self.assertEqual(actual_output, expected_output, f"Test case {i} failed.")
+        
+        print(f"\nTotal subtests: {total_subtests}")
 
 if __name__ == '__main__':
     unittest.main()
