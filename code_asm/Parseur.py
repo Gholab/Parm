@@ -1,7 +1,8 @@
 import re
 #les fichiers en entree/sortie
-input_file_name = 'calckeyb.s'
-output_file_name = 'outputcalc.bin'
+input_file_name = 'input.s'
+output_file_name = 'output.bin'
+
 
 dico ={
     #operation de registre
@@ -66,22 +67,29 @@ dico ={
 
 labels={}
 lines={}
+linesValues={}
 
 categories=["#rr5533","rrr7333","#rr7333","r#538","rr1033","[sp]r#538","#107", "branch"]
-def compilation(instruction):
+def compilation(instruction, number_line):
     if  instruction!='skip':
-        return toHexa(instruction_to_binary(instruction))
+        return toHexa(instruction_to_binary(instruction,number_line))
     
 
-def instruction_to_binary(instruction):
+def instruction_to_binary(instruction,number_line):
     str_binary=""
-    separate=re.findall(r'[^, ]+', instruction)
     
-    #print(cptReg(separate))
+    instruction=instruction.strip()
+    separate=re.findall(r'[^, \t]+', instruction)
+    
+    print(separate)
     #print(hasImm(separate))
     
-    #print(forme(separate))
-    
+    print(forme(separate))
+    if (len(separate)<1):
+        return "skip"
+
+    if (separate[0] not in dico):
+        return "skip"
     if (forme(separate)=="#rr5533"): #categories[0] instr rd rm #imm5 
         #4 elements dans la liste
         str_binary+=dico[separate[0]][0]
@@ -126,13 +134,18 @@ def instruction_to_binary(instruction):
         str_binary+=toBinary(int(separate[1][1:]), 3) # rdn
     
     elif (forme(separate)=="[sp]r#538"):
+        if len(separate)==3:
+            str_binary+=dico[separate[0]]
+            str_binary+=toBinary(int(separate[1][1:]), 3) # rt
+            str_binary+=toBinary(0, 8) # imm8
         #print(separate)
-        separate.remove('[sp')
-        separate[2]=separate[2].replace(']', '')
-        #print(separate)
-        str_binary+=dico[separate[0]]
-        str_binary+=toBinary(int(separate[1][1:]), 3) # rt
-        str_binary+=toBinary(int(int(separate[2][1:])/4), 8) # imm8
+        else:
+            separate.remove('[sp')
+            separate[2]=separate[2].replace(']', '')
+            #print(separate)
+            str_binary+=dico[separate[0]]
+            str_binary+=toBinary(int(separate[1][1:]), 3) # rt
+            str_binary+=toBinary(int(int(separate[2][1:])/4), 8) # imm8
     elif (forme(separate)=="#107"):
         str_binary+=dico[separate[0]]
         #print(int(int(separate[2][1:])/4))
@@ -140,28 +153,18 @@ def instruction_to_binary(instruction):
         #print(str_binary)
     elif (forme(separate)=="branch"):
         N_label=labels[separate[1]]
-        N_instr=lines[instruction]
-        calcul=N_label-N_instr-3
+        calcul=N_label-number_line-3
+
+        print(f"N_label:{N_label} N_lines:{number_line} calcul:{calcul}")
         
         str_binary+=dico[separate[0]]
-        
         if (separate[0]=='b'):
             str_binary+=toComplementA2(calcul,11)
-            
         else:
             str_binary+=toComplementA2(calcul,8)
-            
-        
-    
     else:
         return "skip"
-        
-        
-        
-        
-    
-    
-        
+
     
     #print(str_binary)
     return str_binary   
@@ -234,23 +237,36 @@ def toHexa(str_nb): #prend en parametre le resultat en string des 16 bits d'inst
         # Convert integer to hexadecimal
         hexadecimal_representation = hex(decimal_number)
         res=(place-len(hexadecimal_representation[2:]))*"0"+(hexadecimal_representation[2:])
-        
+        print(res)
         return res     
 
     
 def Parse(F_input):
     getLabels(input_file_name)
+    start=True
     with open(F_input, 'r') as input_file:
         # Read the contents of the input file
         with open(output_file_name, 'w') as output_file:
             output_file.write("v2.0 raw\n")  # Write header outside the loop
-            
+            number_line = 0
             for line in input_file:
                 line = line.rstrip() #enlève les "/n"
-                content = compilation(line) 
-                if content!=None:
-                    output_file.write(content)
-                    output_file.write(" ") 
+                line=line.strip()
+                if (len(line)>0):
+                    if line==".text":
+                        start=False
+                    if line=="run:":
+                        start=True
+                    elif start and line[0]!='.' and line[0]!='@':   
+                        content = compilation(line, number_line) 
+                        number_line+=1
+                        if content!=None:
+                            output_file.write(content)
+                            output_file.write(" ")
+                    if (line==".Lfunc_end0:"):
+                        start=False
+                
+                
     return output_file_name
 
 
@@ -258,19 +274,36 @@ def Parse(F_input):
 def getLabels(F_input):
     with open(F_input, 'r') as input_file:
         l=0 #num de ligne avec une instruction
+        i=0
+        start=True
         for line in input_file:
             line=line.rstrip()
-            if (line[0]!="." and line[0]!="@"):
-                lines[line]=l
-                l+=1
-            #print(line+"  "+str(l))
+            line=line.strip()
+            print(line)
             
-            if(line[0]=="."):
-                labels[line[:-1]]=l
+            
+            if (len(line)>0):
+                l+=1
+                # lines[line]=i
+                # lines[l]=i
+                variable=line.split()
+                if(line[0]=="." and line[-1]==":"):
+                        labels[line[:-1]]=i 
+                if "run:" not in variable and "pop" not in variable and "push" not in variable:
+                     
+                    if (line[0]!="." and line[0]!="@"):
+                        i+=1
+            print(f"variable:{variable}\tl:{l}\ti:{i}")
+                        
+                    
+
+                    
+            
+                    
     return labels
 
 
 Parse(input_file_name)
-#print(lines)
-#print(toBinary(3, 5))
-#print(toComplementA2(-3, 5))
+#print(getLabels(input_file_name))
+
+

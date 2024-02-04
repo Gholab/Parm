@@ -22,6 +22,7 @@ class TestParse(unittest.TestCase):
             # branch
             ("./test_integration/conditional/branch.s", "./test_integration/conditional/branch.bin"),
             
+            
         ]
         
         total_subtests = len(test_cases)
