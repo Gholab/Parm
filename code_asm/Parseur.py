@@ -19,7 +19,7 @@ dico ={
     "ands":"0100000000",
     "eors":"0100000001",
     "adcs":"0100000101",
-    "sbsc":"0100000110",
+    "sbcs":"0100000110",
     "rors":"0100000111",
     "tst":"0100001000",
     "rsbs": "0100001001",
@@ -29,6 +29,8 @@ dico ={
     "muls": "0100001101",
     "bics": "0100001110",
     "mvns": "0100001111",
+    
+    #load store
     "str": "10010",
     "ldr": "10011",
     
@@ -41,16 +43,18 @@ dico ={
 
 categories=["#rr5533","rrr7333","#rr7333","r#538","rr1033","[sp]r#538","#107"]
 def compilation(instruction):
-    return toHexa(instruction_to_binary(instruction))
+    if  instruction!='skip':
+        return toHexa(instruction_to_binary(instruction))
+    
 
 def instruction_to_binary(instruction):
     str_binary=""
     separate=re.findall(r'[^, ]+', instruction)
-    print(separate)
-    print(cptReg(separate))
-    print(hasImm(separate))
-    forme(separate)
-    print(forme(separate))
+    #print(separate)
+    #print(cptReg(separate))
+    #print(hasImm(separate))
+    #print(forme(separate))
+    #print(forme(separate))
     
     if (forme(separate)=="#rr5533"): #categories[0] instr rd rm #imm5 
         #4 elements dans la liste
@@ -76,31 +80,40 @@ def instruction_to_binary(instruction):
         #3 elements dans la liste
         if separate[0] in ["adds","subs"]:
             str_binary+=dico[separate[0]][2]
+            str_binary+=toBinary(int(separate[1][1:]), 3) #  rd
+            str_binary+=toBinary(int(separate[2][1:]), 8) #  imm8
             
         else:
-            str_binary+=dico[separate[0]]
+            str_binary+=dico[separate[0]] 
+            str_binary+=toBinary(int(separate[1][1:]), 3) #  rd
+            str_binary+=toBinary(int(separate[2][1:]), 8) #  imm8
             
-        str_binary+=toBinary(int(separate[1][1:]), 3) #  rd
-        str_binary+=toBinary(int(separate[2][1:]), 3) #  imm8
+        
     
     elif (forme(separate)=="rr1033"):
         #3 elements mn ghir rsbs et muls
-        str_binary+=dico[separate[0]]
+        if separate[0] in ["lsls", "lsrs", "asrs"]:
+            str_binary+=dico[separate[0]][1]
+        else:
+            str_binary+=dico[separate[0]]
         str_binary+=toBinary(int(separate[2][1:]), 3) # rm
         str_binary+=toBinary(int(separate[1][1:]), 3) # rdn
     
     elif (forme(separate)=="[sp]r#538"):
-        print(separate)
+        #print(separate)
         separate.remove('[sp')
         separate[2]=separate[2].replace(']', '')
-        print(separate)
+        #print(separate)
         str_binary+=dico[separate[0]]
         str_binary+=toBinary(int(separate[1][1:]), 3) # rt
-        str_binary+=toBinary(int(separate[2][1:]), 8) # imm8
+        str_binary+=toBinary(int(int(separate[2][1:])/4), 8) # imm8
     elif (forme(separate)=="#107"):
         str_binary+=dico[separate[0]]
-        str_binary+=toBinary(int(separate[2][1:]), 7) # imm7
-        print(str_binary) 
+        #print(int(int(separate[2][1:])/4))
+        str_binary+=toBinary(int(int(separate[2][1:])/4), 7) # imm7
+        #print(str_binary)
+    else:
+        return "skip"
         
         
         
@@ -109,7 +122,7 @@ def instruction_to_binary(instruction):
     
         
     
-    
+    #print(str_binary)
     return str_binary   
     
 
@@ -130,14 +143,16 @@ def hasImm(liste): #return vrai si il y'a un imm false sinon;
     
  #categories=["#rr5533","rrr7333","#rr7333","r#538","rr1033","[sp]r#538","#107"]   
 def forme(liste):#prend en parametre la liste séparéé
-    if(liste[0] in ["str","ldr"]):
+    if (len(liste)==0):
+        return "skip"
+    elif(liste[0] in ["str","ldr"]):
         return categories[5] # {[sp]r#538}
     elif(cptReg(liste)==1 and hasImm(liste)):
         return categories[3] # {r#538}
+    elif((cptReg(liste)==2 and not hasImm(liste)) or (liste[0] in ["rsbs", "muls"])):
+        return categories[4] # {rr1033}
     elif(cptReg(liste)==3):
         return categories[1] # {rrr7333}
-    elif(cptReg(liste)==2 and not hasImm(liste)):
-        return categories[4] # {rr1033}
     elif(cptReg(liste)==0 and hasImm(liste)):
         return categories[6] # {#1O7}
     elif(cptReg(liste)==2 and hasImm(liste) and liste[0] in ["lsls", "lsrs", "asrs"]):
@@ -145,7 +160,7 @@ def forme(liste):#prend en parametre la liste séparéé
     elif(cptReg(liste)==2 and hasImm(liste) and liste[0] in ["adds", "subs"]):
         return categories[2] # {#rr7333}
     else:
-        return "compilation error"
+        return "skip"
     
 def toBinary(nb, place): #place que ça prend
     res=""
@@ -157,23 +172,28 @@ def toBinary(nb, place): #place que ça prend
     return res
 
 def toHexa(str_nb): #prend en parametre le resultat en string des 16 bits d'instruction en binaire
-    place=4
-    decimal_number = int(str_nb, 2)
-    # Convert integer to hexadecimal
-    hexadecimal_representation = hex(decimal_number)
-    res=(place-len(hexadecimal_representation[2:]))*"0"+(hexadecimal_representation[2:])
-    return res     
+    if str_nb!="skip":
+        place=4
+        decimal_number = int(str_nb, 2)
+        # Convert integer to hexadecimal
+        hexadecimal_representation = hex(decimal_number)
+        res=(place-len(hexadecimal_representation[2:]))*"0"+(hexadecimal_representation[2:])
+        #print(res)
+        return res     
+
+def Parse(F_input):
+    with open(F_input, 'r') as input_file:
+        # Read the contents of the input file
+        with open(output_file_name, 'w') as output_file:
+            output_file.write("v2.0 raw\n")  # Write header outside the loop
+            
+            for line in input_file:
+                line = line.rstrip() #enlève les "/n"
+                content = compilation(line) 
+                if content!=None:
+                    output_file.write(content)
+                    output_file.write(" ") 
+    return output_file_name
 
 
-with open(input_file_name, 'r') as input_file:
-    # Read the contents of the input file
-    with open(output_file_name, 'w') as output_file:
-        output_file.write("v2.0 raw\n")  # Write header outside the loop
-        
-        for line in input_file:
-            line = line.rstrip() #enlève les "/n"
-            content = compilation(line) 
-            output_file.write(content)
-            output_file.write(" ") 
-
-
+Parse(input_file_name)
