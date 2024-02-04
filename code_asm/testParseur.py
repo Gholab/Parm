@@ -19,7 +19,9 @@ class TestParse(unittest.TestCase):
             ("./test_integration/data_processing/13-16_instructions.s", "./test_integration/data_processing/13-16_instructions.bin"),
             #miscellaneous test
             ("./test_integration/miscellaneous/sp.s", "./test_integration/miscellaneous/sp.bin"),
-            # Add more test cases as needed
+            # branch
+            ("./test_integration/conditional/branch.s", "./test_integration/conditional/branch.bin"),
+            
         ]
         
         for input_file, expected_output_file in test_cases:

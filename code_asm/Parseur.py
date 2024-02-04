@@ -37,11 +37,37 @@ dico ={
     #miscellanous
     
     "add": "101100000",
-    "sub": "101100001"
+    "sub": "101100001",
+    
+    #branch
+    
+    "bEQ": "11010000",
+    "bNE": "11010001",
+    "bCS": "11010010", 
+    "bHS": "11010010",
+    "bCC": "11010011",
+    "bLO": "11010011",
+    "bMI": "11010100",
+    "bLP": "11010101",
+    "bVS": "11010110",
+    "bVC": "11010111",
+    "bHI": "11011000",
+    "bLS": "11011001",
+    "bGE": "11011010",               
+    "bLT": "11011011",
+    "bGT": "11011100",
+    "bLE": "11011101",
+    "bAL": "11011110",
+    "b": "11100"
+        
+
 
 }
 
-categories=["#rr5533","rrr7333","#rr7333","r#538","rr1033","[sp]r#538","#107"]
+labels={}
+lines={}
+
+categories=["#rr5533","rrr7333","#rr7333","r#538","rr1033","[sp]r#538","#107", "branch"]
 def compilation(instruction):
     if  instruction!='skip':
         return toHexa(instruction_to_binary(instruction))
@@ -50,10 +76,10 @@ def compilation(instruction):
 def instruction_to_binary(instruction):
     str_binary=""
     separate=re.findall(r'[^, ]+', instruction)
-    #print(separate)
+    
     #print(cptReg(separate))
     #print(hasImm(separate))
-    #print(forme(separate))
+    
     #print(forme(separate))
     
     if (forme(separate)=="#rr5533"): #categories[0] instr rd rm #imm5 
@@ -112,6 +138,21 @@ def instruction_to_binary(instruction):
         #print(int(int(separate[2][1:])/4))
         str_binary+=toBinary(int(int(separate[2][1:])/4), 7) # imm7
         #print(str_binary)
+    elif (forme(separate)=="branch"):
+        N_label=labels[separate[1]]
+        N_instr=lines[instruction]
+        calcul=N_label-N_instr-3
+        
+        str_binary+=dico[separate[0]]
+        
+        if (separate[0]=='b'):
+            str_binary+=toComplementA2(calcul,11)
+            
+        else:
+            str_binary+=toComplementA2(calcul,8)
+            
+        
+    
     else:
         return "skip"
         
@@ -159,6 +200,9 @@ def forme(liste):#prend en parametre la liste séparéé
         return categories[0] # {#rr5533}
     elif(cptReg(liste)==2 and hasImm(liste) and liste[0] in ["adds", "subs"]):
         return categories[2] # {#rr7333}
+    elif(liste[0][0]=="b"):
+        return categories[7] # {branch}
+        
     else:
         return "skip"
     
@@ -170,6 +214,18 @@ def toBinary(nb, place): #place que ça prend
     res="0"*(place-len(res))+res
     
     return res
+def toComplementA2(nb, place):
+    
+    if nb >= 0:
+        binary = bin(nb)[2:].zfill(place)  # Convertir en binaire et remplir avec des zéros à gauche
+    else:
+        binary = bin(2**place + nb)[2:]  # Convertir en binaire et ajouter 2^place pour le complément à deux
+    res=str(binary)
+    return res
+        
+    
+    
+    
 
 def toHexa(str_nb): #prend en parametre le resultat en string des 16 bits d'instruction en binaire
     if str_nb!="skip":
@@ -178,10 +234,12 @@ def toHexa(str_nb): #prend en parametre le resultat en string des 16 bits d'inst
         # Convert integer to hexadecimal
         hexadecimal_representation = hex(decimal_number)
         res=(place-len(hexadecimal_representation[2:]))*"0"+(hexadecimal_representation[2:])
-        #print(res)
+        
         return res     
 
+    
 def Parse(F_input):
+    getLabels(input_file_name)
     with open(F_input, 'r') as input_file:
         # Read the contents of the input file
         with open(output_file_name, 'w') as output_file:
@@ -196,4 +254,23 @@ def Parse(F_input):
     return output_file_name
 
 
+    
+def getLabels(F_input):
+    with open(F_input, 'r') as input_file:
+        l=0 #num de ligne avec une instruction
+        for line in input_file:
+            line=line.rstrip()
+            if (line[0]!="." and line[0]!="@"):
+                lines[line]=l
+                l+=1
+            #print(line+"  "+str(l))
+            
+            if(line[0]=="."):
+                labels[line[:-1]]=l
+    return labels
+
+
 Parse(input_file_name)
+#print(lines)
+#print(toBinary(3, 5))
+#print(toComplementA2(-3, 5))
