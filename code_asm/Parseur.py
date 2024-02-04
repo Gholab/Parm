@@ -43,7 +43,7 @@ dico ={
     #branch
     
     "bEQ": "11010000",
-    "bNE": "11010001",
+    "bne": "11010001",
     "bCS": "11010010", 
     "bHS": "11010010",
     "bCC": "11010011",
@@ -54,7 +54,7 @@ dico ={
     "bVC": "11010111",
     "bHI": "11011000",
     "bLS": "11011001",
-    "bGE": "11011010",               
+    "bge": "11011010",               
     "bLT": "11011011",
     "bGT": "11011100",
     "bLE": "11011101",
@@ -189,6 +189,8 @@ def hasImm(liste): #return vrai si il y'a un imm false sinon;
 def forme(liste):#prend en parametre la liste séparéé
     if (len(liste)==0):
         return "skip"
+    if (liste==['add', 'r7', 'sp', '#8']):
+        return "skip"
     elif(liste[0] in ["str","ldr"]):
         return categories[5] # {[sp]r#538}
     elif(cptReg(liste)==1 and hasImm(liste)):
@@ -241,30 +243,27 @@ def toHexa(str_nb): #prend en parametre le resultat en string des 16 bits d'inst
         return res     
 
     
-def Parse(F_input):
-    getLabels(input_file_name)
+def Parse(F_input, name):
+    getLabels(F_input)
     start=True
     with open(F_input, 'r') as input_file:
         # Read the contents of the input file
-        with open(output_file_name, 'w') as output_file:
+        with open(name+output_file_name, 'w') as output_file:
             output_file.write("v2.0 raw\n")  # Write header outside the loop
             number_line = 0
             for line in input_file:
                 line = line.rstrip() #enlève les "/n"
                 line=line.strip()
+                variable=line.split()
                 if (len(line)>0):
-                    if line==".text":
-                        start=False
-                    if line=="run:":
-                        start=True
-                    elif start and line[0]!='.' and line[0]!='@':   
-                        content = compilation(line, number_line) 
-                        number_line+=1
-                        if content!=None:
-                            output_file.write(content)
-                            output_file.write(" ")
-                    if (line==".Lfunc_end0:"):
-                        start=False
+                    if "run:" not in variable and "pop" not in variable and "push" not in variable:
+                        if line[0]!='.' and line[0]!='@':   
+                            content = compilation(line, number_line) 
+                            number_line+=1
+                            if content!=None:
+                                output_file.write(content)
+                                output_file.write(" ")
+                    
                 
                 
     return output_file_name
@@ -303,7 +302,7 @@ def getLabels(F_input):
     return labels
 
 
-Parse(input_file_name)
+Parse(input_file_name,"")
 #print(getLabels(input_file_name))
 
 
