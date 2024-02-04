@@ -1,7 +1,7 @@
 import re
 #les fichiers en entree/sortie
-input_file_name = 'input.s'
-output_file_name = 'output.bin'
+input_file_name = 'calckeyb.s'
+output_file_name = 'outputcalc.bin'
 
 dico ={
     #operation de registre
