@@ -219,7 +219,7 @@ end TCL_Generic;
   <circuit name="Facade">
     <a name="appearance" val="logisim_evolution"/>
     <a name="circuit" val="Facade"/>
-    <a name="simulationFrequency" val="2048000.0"/>
+    <a name="simulationFrequency" val="1.0"/>
     <comp lib="0" loc="(1010,220)" name="Probe">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
@@ -1617,20 +1617,25 @@ end TCL_Generic;
       <a name="addrWidth" val="16"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 16 16
-b09b b0ff b0f1 2000 9005 e7fe 2000 9004
-e7fe 9804 9905 4288 dc52 e7fe 9804 9003
-9803 9905 1a09 4288 dd04 e7fe 9805 9903
-1a40 9003 e7fe 2001 9002 2000 9001 e7fe
-9801 9903 4288 da10 e7fe 9802 9905 9a01
-1a89 4341 1c50 c 5 9817 9000 9800
-9002 e7fe 9801 1c40 9001 e7e8 9802 900c
-e7fe 9816 900a 980a e00 900a 2000 9009
-9008 e7fe 9808 2801 d810 e7fe 980a 210f
-4008 9007 980a 900 900a e7fe 9807 3030
-900b e7fe e7fe 9808 1c40 9008 e7e9 e7fe
-e7fe 2020 900b e7fe e7fe 9804 1c40 9004
-e7a6 e7fe 200a 900b e7fe e7fe 9805 1c40
-9005 e79a
+b09b b0ff b0f1 2001 9005 9004 2064 9001
+e06f e7fe 9803 2107 1a08 9902 2203 4011
+c9 4308 2101 4081 980d 4308 900d e7fe
+e7fe 9805 2107 1a08 9904 2203 4011 c9
+4308 2101 4081 980d 4308 900d e7fe e7fe
+2001 900e e7fe 9811 2800 d002 e7fe 9812
+9001 e7fe e7fe 9805 2107 1a08 9904 2203
+4011 c9 4308 2101 4081 980d 4388 900d
+e7fe 9801 2871 d103 e7fe 9805 1e40 9005
+e019 9801 2864 d103 e7fe 9805 1c40 9005
+e010 9801 287a d103 e7fe 9804 1e40 9004
+e007 9801 2873 d103 e7fe 9804 1c40 9004
+4*e7fe 9805 2107 4008 9005 9804 2103 4008
+9004 9805 9903 4288 d126 e7fe 9804 9902
+4288 d121 e7fe 980c 1c40 900c e7fe e7fe
+9815 2107 4008 9003 9815 2103 4008 9002
+e7fe 9805 9903 2200 4288 9200 d106 e7fe
+9804 9902 1a40 4241 4148 9000 e7fe 9800
+7c0 2800 d1e3 e7fe e7fe e76e
 </a>
       <a name="dataWidth" val="16"/>
       <a name="label" val="ROMa"/>
