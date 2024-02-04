@@ -88,7 +88,7 @@ class TestParse:
             percentage_correct = (correct_count / len(expected)) * 100
             if percentage_correct == 100:
                 total_tests_correct +=1
-            print(f"Percentage of Correctness: {percentage_correct:.2f}%")
+            #print(f"Percentage of Correctness: {percentage_correct:.2f}%")
         print(f"Total number of tests correct {total_tests_correct}/{len(self.output_test_cases)}")
 
     def get_expected_bin(self, file_name):
